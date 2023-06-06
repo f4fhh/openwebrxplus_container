@@ -23,7 +23,7 @@ docker run -d \
 -v /mnt/user/appdata/openwebrxplus:/var/lib/openwebrx
 -e OPENWEBRX_ADMIN_USER=admin
 -e OPENWEBRX_ADMIN_PASSWORD=admin
-f4fhh/openwebrxplus_container
+ghcr.io/f4fhh/openwebrxplus_container:latest
 ```
 ### HISTORY
  - Version 0.1.0: Initial build
