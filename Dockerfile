@@ -169,6 +169,7 @@ RUN wget -q -O - https://luarvique.github.io/ppa/openwebrx-plus.gpg | gpg --dear
         js8call \
         python3-js8py \
         nmux \
+        libfaad2 \
         imagemagick
 
 # install the container entrypoint
