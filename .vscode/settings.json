@@ -1,0 +1,24 @@
+{
+    "docker.commands.run": [
+        {
+            "label": "Default run command",
+            "template": "${containerCommand} run --rm ${exposedPorts} ${tag}"
+        },
+        {
+            "label": "Run OpenWebRXplus container",
+            "template": "${containerCommand} run --rm --device /dev/bus/usb -v /mnt/user/appdata/openwebrxplus:/var/lib/openwebrx -e OPENWEBRX_ADMIN_USER=admin -e OPENWEBRX_ADMIN_PASSWORD=admin ${exposedPorts} ${tag}",
+            "match": "openwebrxplus_container"
+        }
+    ],
+    "docker.commands.runInteractive": [
+        {
+            "label": "Default run interactive command",
+            "template": "${containerCommand} run --rm -it ${exposedPorts} ${tag}"
+        },
+        {
+            "label": "Run interactive OpenWebRXplus container",
+            "template": "${containerCommand} run --rm -it --device /dev/bus/usb -v /mnt/user/appdata/openwebrxplus:/var/lib/openwebrx -e OPENWEBRX_ADMIN_USER=admin -e OPENWEBRX_ADMIN_PASSWORD=admin ${exposedPorts} ${tag}",
+            "match": "openwebrxplus_container"
+        }
+    ]
+}
