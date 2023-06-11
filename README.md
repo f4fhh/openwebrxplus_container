@@ -30,7 +30,7 @@ ghcr.io/f4fhh/openwebrxplus_container:latest
 
 ### Credits
  - [SDRPlay](https://github.com/SDRplay) for the SDK of the RSP devices
- - [OpenWebRX+](https://github.com/luarvique/openwebrx) 
+ - [OpenWebRX+](https://github.com/luarvique/openwebrx) by [Marat Fayzullin](http://fms.komkon.org/)
 
 ## Licensing
 OpenWebRX+ is available under Affero GPL v3 license
