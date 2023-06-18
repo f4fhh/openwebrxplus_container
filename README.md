@@ -27,6 +27,7 @@ ghcr.io/f4fhh/openwebrxplus_container:latest
 ```
 ### HISTORY
  - Version 0.1.0: Initial build
+ - Version 0.1.1: Upgraded SoapySDRPlay3 
 
 ### Credits
  - [SDRPlay](https://github.com/SDRplay) for the SDK of the RSP devices
