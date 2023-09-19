@@ -57,8 +57,8 @@ RUN git clone https://github.com/knatterfunker/codecserver-softmbe.git \
     && cd codecserver-softmbe \
     && dpkg-buildpackage
 
-# dumphfdl build container
-FROM debian:bullseye-slim as build_dumphfdl
+# acarsdec build container
+FROM debian:bullseye-slim as build_acarsdec
 
 ARG BUILD_DIR=/build
 ENV DEBIAN_FRONTEND=noninteractive
@@ -70,12 +70,7 @@ RUN apt-get update \
         git \
         build-essential \
         cmake \
-        pkg-config \
-        libglib2.0-dev \
-        libconfig++-dev \
-        libliquid-dev \
-        libfftw3-dev \
-        libxml2-dev
+        libsndfile1-dev
 
 RUN git clone https://github.com/szpajder/libacars \
     && cd libacars \
@@ -84,12 +79,12 @@ RUN git clone https://github.com/szpajder/libacars \
     && cmake .. && make && make install \
     && ldconfig
 
-RUN git clone https://github.com/szpajder/dumphfdl.git \
-    && cd dumphfdl \
+RUN git clone https://github.com/wiedehopf/acarsdec \
+    && cd acarsdec \
     && mkdir build && cd build \
     && cmake .. && make && make install
 
-RUN ldd $(which dumphfdl) | cut -d" " -f3 | xargs tar --dereference -cf /tmp/libs.tar
+RUN ldd $(which acarsdec) | cut -d" " -f3 | xargs tar --dereference -cf /tmp/libs.tar
 
 # dream build container
 FROM debian:bullseye-slim as build_dream
@@ -162,6 +157,9 @@ RUN wget -q -O - https://luarvique.github.io/ppa/openwebrx-plus.gpg | gpg --dear
         python3-digiham \
         multimon-ng \
         rtl-433 \
+        dumphfdl \
+        dumpvdl2 \
+        dump1090-fa \
         msk144decoder \
         m17-demod \
         codecserver \
@@ -186,9 +184,9 @@ WORKDIR /tmp/packages
 RUN dpkg -i *.deb && rm -r /tmp/packages
 RUN echo '[device:softmbe]\ndriver=softmbe\n' >>/etc/codecserver/codecserver.conf
 
-# install dumphfdl
-COPY --from=build_dumphfdl /usr/local/bin/dumphfdl /usr/local/bin/dumphfdl
-COPY --from=build_dumphfdl /tmp/libs.tar /tmp/libs.tar
+# install acarsdec
+COPY --from=build_acarsdec /usr/local/bin/acarsdec /usr/local/bin/acarsdec
+COPY --from=build_acarsdec /tmp/libs.tar /tmp/libs.tar
 WORKDIR /
 RUN tar -xf /tmp/libs.tar && rm /tmp/libs.tar
 
