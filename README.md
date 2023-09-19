@@ -31,6 +31,7 @@ ghcr.io/f4fhh/openwebrxplus_container:latest
  - Version 0.1.2: Updated OpenWebRX+ to 1.2.20
  - Version 0.1.3: Updated OpenWebRX+ to 1.2.21
  - Version 0.1.4: Updated OpenWebRX+ to 1.2.24
+ - Version 0.1.5: Updated OpenWebRx+ to 1.2.30
 
 ### Credits
  - [SDRPlay](https://github.com/SDRplay) for the SDK of the RSP devices
