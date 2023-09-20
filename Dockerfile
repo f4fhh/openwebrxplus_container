@@ -70,7 +70,8 @@ RUN apt-get update \
         git \
         build-essential \
         cmake \
-        libsndfile1-dev
+        libxml2-dev \
+        libjansson-dev
 
 RUN git clone https://github.com/szpajder/libacars \
     && cd libacars \
@@ -79,8 +80,9 @@ RUN git clone https://github.com/szpajder/libacars \
     && cmake .. && make && make install \
     && ldconfig
 
-RUN git clone https://github.com/wiedehopf/acarsdec \
+RUN git clone https://github.com/jketterl/acarsdec \
     && cd acarsdec \
+    && git checkout add_stdin \
     && mkdir build && cd build \
     && cmake .. && make && make install
 
