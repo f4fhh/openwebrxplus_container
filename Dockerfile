@@ -71,6 +71,7 @@ RUN apt-get update \
         build-essential \
         cmake \
         libxml2-dev \
+        libsndfile1-dev \
         libjansson-dev
 
 RUN git clone https://github.com/szpajder/libacars \
