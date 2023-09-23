@@ -65,29 +65,28 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+        gpg \
         wget \
         ca-certificates \
         git \
+        debhelper \
         build-essential \
         cmake \
+        checkinstall \
         libxml2-dev \
         libsndfile1-dev \
-        libjansson-dev
-
-RUN git clone https://github.com/szpajder/libacars \
-    && cd libacars \
-    && git checkout unstable \
-    && mkdir build && cd build \
-    && cmake .. && make && make install \
-    && ldconfig
+        libjansson-dev \
+    && wget -q -O - https://repo.openwebrx.de/debian/key.gpg.txt | gpg --dearmor -o /usr/share/keyrings/openwebrx.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/openwebrx.gpg] https://repo.openwebrx.de/debian/ bullseye main" > /etc/apt/sources.list.d/openwebrx.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        libacars2
 
 RUN git clone https://github.com/jketterl/acarsdec \
     && cd acarsdec \
     && git checkout add_stdin \
     && mkdir build && cd build \
-    && cmake .. && make && make install
-
-RUN ldd $(which acarsdec) | cut -d" " -f3 | xargs tar --dereference -cf /tmp/libs.tar
+    && cmake .. -DCMAKE_INSTALL_PREFIX=/usr && make && checkinstall -y --strip=yes --pkgname=acarsdec
 
 # dream build container
 FROM debian:bullseye-slim as build_dream
@@ -171,6 +170,9 @@ RUN wget -q -O - https://luarvique.github.io/ppa/openwebrx-plus.gpg | gpg --dear
         python3-js8py \
         nmux \
         libfaad-dev \
+        libxml2-dev \
+        libsndfile1-dev \
+        libjansson-dev \
         imagemagick
 
 # install the container entrypoint
@@ -188,10 +190,9 @@ RUN dpkg -i *.deb && rm -r /tmp/packages
 RUN echo '[device:softmbe]\ndriver=softmbe\n' >>/etc/codecserver/codecserver.conf
 
 # install acarsdec
-COPY --from=build_acarsdec /usr/local/bin/acarsdec /usr/local/bin/acarsdec
-COPY --from=build_acarsdec /tmp/libs.tar /tmp/libs.tar
-WORKDIR /
-RUN tar -xf /tmp/libs.tar && rm /tmp/libs.tar
+COPY --from=build_acarsdec /acarsdec/build/*.deb /tmp/packages/
+WORKDIR /tmp/packages
+RUN dpkg -i *.deb && rm -r /tmp/packages
 
 # install dream
 COPY --from=build_dream /usr/bin/dream /usr/bin/dream
