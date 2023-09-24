@@ -75,16 +75,15 @@ RUN apt-get update \
         checkinstall \
         libxml2-dev \
         libsndfile1-dev \
-        libjansson-dev \
-    && wget -q -O - https://repo.openwebrx.de/debian/key.gpg.txt | gpg --dearmor -o /usr/share/keyrings/openwebrx.gpg \
-    && echo "deb [signed-by=/usr/share/keyrings/openwebrx.gpg] https://repo.openwebrx.de/debian/ bullseye main" > /etc/apt/sources.list.d/openwebrx.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-        libacars2
+        libjansson-dev
+
+RUN git clone https://github.com/szpajder/libacars \
+    && cd libacars \
+    && mkdir build && cd build \
+    && cmake .. -DCMAKE_INSTALL_PREFIX=/usr && make && checkinstall -y --strip=yes --stripso=yes --addso=yes --pkgname=libacasr --pkgversion=2
 
 RUN git clone https://github.com/jketterl/acarsdec \
     && cd acarsdec \
-    && git checkout add_stdin \
     && mkdir build && cd build \
     && cmake .. -DCMAKE_INSTALL_PREFIX=/usr && make && checkinstall -y --strip=yes --pkgname=acarsdec
 
